@@ -1,6 +1,9 @@
 package space_cruiser_java;
 
-public enum ServerMessages
+public class ServerMessages
 {
-	TEST
+	public enum ShipBuild
+	{
+		SHIP
+	}
 }

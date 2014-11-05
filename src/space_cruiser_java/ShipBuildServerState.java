@@ -10,6 +10,8 @@ public class ShipBuildServerState implements ServerState
 	
 	public void activate( SpaceCruiserServer s, NetworkServer n ) 
 	{
-		
+		n.on( ShipBuildServerState.class, ClientMessages.ShipBuild.JOIN, (m) -> {
+			n.sendTCP( m.getSender(), ServerMessages.ShipBuild.SHIP, m.getValue() );
+		});
 	}
 }

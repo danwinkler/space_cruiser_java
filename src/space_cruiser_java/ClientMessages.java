@@ -1,6 +1,9 @@
 package space_cruiser_java;
 
-public enum ClientMessages 
+public class ClientMessages
 {
-	
+	public enum ShipBuild
+	{
+		JOIN
+	}
 }

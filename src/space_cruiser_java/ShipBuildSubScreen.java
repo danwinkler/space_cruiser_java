@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.danwink.game_framework.network.MessagePacket;
 import com.danwink.game_framework.network.NetworkClient;
+import com.danwink.game_framework.network.NetworkMessager.MessageListener;
 
 import game_framework.Screen;
 import game_framework.ScreenManager;
@@ -23,6 +25,8 @@ public class ShipBuildSubScreen implements Screen
 	Table table;
 	
 	NetworkClient c;
+	
+	Ship ship;
 	
 	public void activate( Optional<Object> o )
 	{
@@ -41,8 +45,19 @@ public class ShipBuildSubScreen implements Screen
 	    //Grab the client instance from PlayScreen
 	    c = PlayScreen.class.cast( ScreenManager.getScreenManager( this ) ).client;
 	    
-	    //Clear the listeners; we're in control now
-	    c.clearListeners();
+	    c.on( ShipBuildSubScreen.class, ServerMessages.ShipBuild.SHIP, (MessagePacket<Ship> m) -> {
+	    	this.ship = m.getValue();
+	    });
+	    
+	    c.sendTCP( ClientMessages.ShipBuild.JOIN, null );
+	}
+	
+	public class T implements MessageListener<Ship>
+	{
+		public void on(MessagePacket<Ship> m) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	public void render() 
@@ -75,6 +90,7 @@ public class ShipBuildSubScreen implements Screen
 	{
 		sr.dispose();
 		stage.dispose();
+		c.clearListeners( ShipBuildSubScreen.class );
 	}
 	
 	public void resize( int width, int height )
