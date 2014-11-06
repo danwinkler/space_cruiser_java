@@ -5,8 +5,11 @@ import java.util.Optional;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.danwink.game_framework.network.MessagePacket;
@@ -20,10 +23,15 @@ import game_framework.ScreenManager;
 public class ShipBuildSubScreen implements Screen 
 {
 	OrthographicCamera camera;
-	ShapeRenderer sr;
+	Vector3 mousePos = new Vector3();
 	
 	Stage stage;
 	Table table;
+	
+	ShapeRenderer sr;
+	SpriteBatch batch;
+	
+	Texture floor;
 	
 	NetworkClient client;
 	
@@ -33,6 +41,7 @@ public class ShipBuildSubScreen implements Screen
 	{
 		camera = new OrthographicCamera();
 		sr = new ShapeRenderer();
+		batch = new SpriteBatch();
 		
 		stage = new Stage();
 	    Gdx.input.setInputProcessor( stage );
@@ -67,8 +76,12 @@ public class ShipBuildSubScreen implements Screen
 		stage.act( Gdx.graphics.getDeltaTime() );
 	    
 		camera.update();
+		mousePos.x = Gdx.input.getX();
+		mousePos.y = Gdx.input.getY();
+		camera.unproject( mousePos );
 		
 		sr.setProjectionMatrix( camera.combined );
+		batch.setProjectionMatrix( camera.combined );
 		
 		client.update();
 		
@@ -80,7 +93,7 @@ public class ShipBuildSubScreen implements Screen
 		
 		if( ship != null )
 		{
-			ship.render( true, sr );
+			ship.renderGrid( sr, batch, mousePos );
 		}
 		
 		stage.draw();
@@ -92,6 +105,7 @@ public class ShipBuildSubScreen implements Screen
 	{
 		sr.dispose();
 		stage.dispose();
+		batch.dispose();
 		client.clearListeners( ShipBuildSubScreen.class );
 	}
 	
