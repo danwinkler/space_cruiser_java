@@ -7,6 +7,7 @@ import game_framework.ScreenManager;
 
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.screens.TitleScreen;
+import com.danwink.space_cruiser.server.SpaceCruiserServer;
 
 public class SpaceCruiser 
 {
@@ -14,7 +15,7 @@ public class SpaceCruiser
 	
 	public static void main( String[] args )
 	{
-		DGame g = new DGame( "Space Cruiser", 800, 600 );
+		DGame g = new DGame( "Space Cruiser", 1280, 800 );
 		
 		g.begin( () -> {
 			g.add( "title", new TitleScreen( "Space Cruiser" ) {{

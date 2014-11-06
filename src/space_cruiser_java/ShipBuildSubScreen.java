@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.danwink.game_framework.network.MessagePacket;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.network.NetworkMessager.MessageListener;
+import com.danwink.space_cruiser.game_objects.Ship;
 
 import game_framework.Screen;
 import game_framework.ScreenManager;
@@ -24,7 +25,7 @@ public class ShipBuildSubScreen implements Screen
 	Stage stage;
 	Table table;
 	
-	NetworkClient c;
+	NetworkClient client;
 	
 	Ship ship;
 	
@@ -43,13 +44,13 @@ public class ShipBuildSubScreen implements Screen
 	    resize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
 		
 	    //Grab the client instance from PlayScreen
-	    c = PlayScreen.class.cast( ScreenManager.getScreenManager( this ) ).client;
+	    client = PlayScreen.class.cast( ScreenManager.getScreenManager( this ) ).client;
 	    
-	    c.on( ShipBuildSubScreen.class, ServerMessages.ShipBuild.SHIP, (MessagePacket<Ship> m) -> {
+	    client.on( ShipBuildSubScreen.class, ServerMessages.ShipBuild.SHIP, (MessagePacket<Ship> m) -> {
 	    	this.ship = m.getValue();
 	    });
 	    
-	    c.sendTCP( ClientMessages.ShipBuild.JOIN, null );
+	    client.sendTCP( ClientMessages.ShipBuild.JOIN, null );
 	}
 	
 	public class T implements MessageListener<Ship>
@@ -69,17 +70,18 @@ public class ShipBuildSubScreen implements Screen
 		
 		sr.setProjectionMatrix( camera.combined );
 		
+		client.update();
+		
 		//Drawing code
 		Gdx.gl.glClearColor( 0, 0, 0, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 		
 		sr.setColor( 1, 1, 1, 1 );
 		
-		sr.begin( ShapeType.Line );
-		
-		sr.rect( Gdx.input.getX(), Gdx.input.getY(), 20, 20 );
-		
-		sr.end();
+		if( ship != null )
+		{
+			ship.render( true, sr );
+		}
 		
 		stage.draw();
 
@@ -90,7 +92,7 @@ public class ShipBuildSubScreen implements Screen
 	{
 		sr.dispose();
 		stage.dispose();
-		c.clearListeners( ShipBuildSubScreen.class );
+		client.clearListeners( ShipBuildSubScreen.class );
 	}
 	
 	public void resize( int width, int height )
