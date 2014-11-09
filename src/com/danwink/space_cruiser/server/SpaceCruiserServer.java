@@ -11,8 +11,7 @@ public class SpaceCruiserServer
 {
 	NetworkServer server;
 	
-	HashMap<Class, ServerState> states = new HashMap<Class, ServerState>();
-	ServerState current = null;
+	HashMap<Class, ServerGameHandler> states = new HashMap<Class, ServerGameHandler>();
 	
 	Thread updateLoop;
 	
@@ -24,16 +23,17 @@ public class SpaceCruiserServer
 	
 	public SpaceCruiserServer()
 	{
-		server = new NetworkServer( StaticFiles.registerClasses );
+		server = new NetworkServer( StaticFiles.get() );
 		
-		states.put( ShipBuildServerState.class, new ShipBuildServerState() );
+		states.put( ShipBuildServerHandler.class, new ShipBuildServerHandler() );
+		states.put( SpaceNavigateServerHandler.class, new SpaceNavigateServerHandler() );
 	}
 	
 	public void start() throws IOException
 	{
 		server.start( 54321, 54322 );
 		
-		activate( ShipBuildServerState.class );
+		activate( ShipBuildServerHandler.class );
 		
 		updateLoop = new Thread( () -> {
 			lastTime = System.currentTimeMillis();
@@ -66,9 +66,9 @@ public class SpaceCruiserServer
 	public void update()
 	{
 		server.update();
-		if( current != null )
+		for( ServerGameHandler s : states.values() )
 		{
-			current.update( this, server );
+			s.update( this, server );
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class SpaceCruiserServer
 		states.get( c ).activate( this, server );
 	}
 
-	public interface ServerState
+	public interface ServerGameHandler
 	{
 		public void activate( SpaceCruiserServer s, NetworkServer n );
 		public void update( SpaceCruiserServer s, NetworkServer n );

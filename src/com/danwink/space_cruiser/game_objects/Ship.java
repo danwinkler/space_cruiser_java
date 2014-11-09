@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.phyloa.dlib.math.Point2i;
 
 import game_framework.TileMap;
+import game_framework.TileMap.Tile;
 
 public class Ship 
 {
@@ -49,7 +51,10 @@ public class Ship
 		sr.begin( ShapeType.Line );
 		batch.begin();
 		map.render( (t,x,y,w,h) -> {
-			batch.draw( StaticFiles.floor, x, y );
+			if( t != null )
+			{
+				batch.draw( StaticFiles.floor, x, y );
+			}
 			if( mousePos.x > x && mousePos.x < x+w && mousePos.y > y && mousePos.y < y+h )
 			{
 				sr.setColor( 1, 0, 0, 1 );
@@ -66,5 +71,33 @@ public class Ship
 		});
 		batch.end();
 		sr.end();
+	}
+
+	public Point2i worldToTileSpace( Vector3 mousePos ) 
+	{
+		return map.worldToTileSpace( mousePos.x, mousePos.y );
+	}
+	
+	public static class Floor implements Tile
+	{
+		public boolean isPassable() 
+		{
+			return true;
+		}
+	}
+
+	public Tile getTile( int x, int y )
+	{
+		return map.getTile( x, y );
+	}
+	
+	public Tile getTile( Point2i pos )
+	{
+		return map.getTile( pos );
+	}
+
+	public void setTile( Tile t, int x, int y )
+	{
+		map.setTile( t, x, y );
 	}
 }

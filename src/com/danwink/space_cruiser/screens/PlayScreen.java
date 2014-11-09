@@ -1,4 +1,4 @@
-package space_cruiser_java;
+package com.danwink.space_cruiser.screens;
 
 import java.util.Optional;
 
@@ -13,6 +13,7 @@ public class PlayScreen extends ScreenManager
 	public PlayScreen() 
 	{
 		add( "shipbuild", new ShipBuildSubScreen() );
+		add( "spacenavigate", new SpaceNavigateSubScreen() );
 	}
 	
 	@Override
