@@ -28,6 +28,11 @@ public class ClientShipSystem extends IteratingSystem
 		client.group( ShipSubScreen.class, g -> {
 			g.on( ServerMessages.Ship.SHIP, (MessagePacket<EntityPacket> m) -> {
 				Entity ship = getOwnShip();
+				if( ship == null )
+				{
+					ship = new Entity();
+					engine.addEntity( ship );
+				}
 				for( Component c : m.getValue().components )
 				{
 					ship.add( c );

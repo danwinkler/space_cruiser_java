@@ -17,12 +17,6 @@ public class ShipServerHandler implements ServerGameHandler
 	{
 		engine = new Engine();
 		
-		Entity ship = new Entity();
-		ship.add( new MapComponent() );
-		ship.add( new ShipComponent() );
-		
-		engine.addEntity( ship );
-		
 		engine.addSystem( new ServerShipSystem( server ) );
 		
 		/*

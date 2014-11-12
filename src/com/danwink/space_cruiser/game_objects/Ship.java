@@ -59,13 +59,6 @@ public class Ship
 		return map.worldToTileSpace( mousePos.x, mousePos.y );
 	}
 	
-	public static class Floor implements Tile
-	{
-		public boolean isPassable() 
-		{
-			return true;
-		}
-	}
 
 	public Tile getTile( int x, int y )
 	{

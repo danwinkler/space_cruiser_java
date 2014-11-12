@@ -6,9 +6,9 @@ public enum ShipSize
 	B( "B-Class", 15, 10 ),
 	C( "C-Class", 20, 15 );
 	
-	String name;
-	int width;
-	int height;
+	public String name;
+	public int width;
+	public int height;
 	
 	ShipSize( String name, int width, int height )
 	{

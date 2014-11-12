@@ -23,7 +23,7 @@ import com.danwink.space_cruiser.ServerMessages;
 import com.danwink.space_cruiser.ServerMessages.ShipBuild;
 import com.danwink.space_cruiser.ServerMessages.ShipBuildChangeTilePacket;
 import com.danwink.space_cruiser.game_objects.Ship;
-import com.danwink.space_cruiser.game_objects.Ship.Floor;
+import com.danwink.space_cruiser.game_objects.Tiles;
 import com.phyloa.dlib.math.Point2i;
 
 import game_framework.Screen;
@@ -165,7 +165,7 @@ public class ShipBuildSubScreen implements Screen, InputProcessor
 		
 		if( button == Input.Buttons.LEFT )
 		{
-			setTile( new Floor(), x, y );
+			setTile( new Tiles.Floor(), x, y );
 		}
 		return false;
 	}
@@ -176,7 +176,7 @@ public class ShipBuildSubScreen implements Screen, InputProcessor
 		
 		if( Gdx.input.isButtonPressed( Input.Buttons.LEFT ) )
 		{
-			setTile( new Floor(), x, y );
+			setTile( new Tiles.Floor(), x, y );
 		}
 		return false;
 	}

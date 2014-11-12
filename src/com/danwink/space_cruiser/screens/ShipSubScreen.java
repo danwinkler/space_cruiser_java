@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.screens.BasicScreen;
 import com.danwink.space_cruiser.ClientMessages;
@@ -16,6 +19,10 @@ public class ShipSubScreen extends BasicScreen
 	
 	Engine engine;
 	
+	MapRenderSystem mrs;
+	
+	Vector3 mousePos = new Vector3();
+	
 	public void activate( Optional<Object> o )
 	{
 		client = (NetworkClient)o.get();
@@ -23,7 +30,7 @@ public class ShipSubScreen extends BasicScreen
 		engine = new Engine();
 		
 		client.group( ShipSubScreen.class, g -> {
-			engine.addSystem( new MapRenderSystem( sr, batch ) );
+			engine.addSystem( mrs = new MapRenderSystem( sr, batch ) );
 			engine.addSystem( new ClientShipSystem( client ) );
 		});
 		
@@ -32,6 +39,11 @@ public class ShipSubScreen extends BasicScreen
 	
 	public void render()
 	{
+		client.update();
+		mousePos.x = Gdx.input.getX();
+		mousePos.y = Gdx.input.getY();
+		camera.unproject( mousePos );
+		mrs.setMousePos( mousePos );
 		engine.update( Gdx.graphics.getDeltaTime() );
 	}
 
