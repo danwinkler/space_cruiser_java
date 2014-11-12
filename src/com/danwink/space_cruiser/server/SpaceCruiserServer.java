@@ -1,11 +1,12 @@
 package com.danwink.space_cruiser.server;
 
+import game_framework.GameLoop;
+
 import java.io.IOException;
 import java.util.HashMap;
 
-import space_cruiser_java.StaticFiles;
-
 import com.danwink.game_framework.network.NetworkServer;
+import com.danwink.space_cruiser.StaticFiles;
 
 public class SpaceCruiserServer 
 {
@@ -13,13 +14,9 @@ public class SpaceCruiserServer
 	
 	HashMap<Class, ServerGameHandler> states = new HashMap<Class, ServerGameHandler>();
 	
-	Thread updateLoop;
+	GameLoop gl;
 	
 	boolean running = true;
-
-	private long lastTime;
-	private long timeDiff;
-	long frameTime = 1000/30;
 	
 	public SpaceCruiserServer()
 	{
@@ -27,48 +24,27 @@ public class SpaceCruiserServer
 		
 		states.put( ShipBuildServerHandler.class, new ShipBuildServerHandler() );
 		states.put( SpaceNavigateServerHandler.class, new SpaceNavigateServerHandler() );
+		states.put( ShipServerHandler.class, new ShipServerHandler() );
 	}
 	
 	public void start() throws IOException
 	{
 		server.start( 54321, 54322 );
 		
-		activate( ShipBuildServerHandler.class );
+		activate( ShipServerHandler.class );
 		
-		updateLoop = new Thread( () -> {
-			lastTime = System.currentTimeMillis();
-			while( running )
-			{
-				try{
-				update();
-				} catch( Exception ex )
-				{
-					ex.printStackTrace();
-				}
-				long time = System.currentTimeMillis();
-				timeDiff = (lastTime + frameTime) - time;
-				if( timeDiff > 0 )
-				{
-					try {
-						Thread.sleep( timeDiff );
-					} catch( InterruptedException e ) {
-						e.printStackTrace();
-					}
-				}
-				lastTime = System.currentTimeMillis();
-			}
-			server.stop();
+		gl = new GameLoop();
+		gl.start( delta -> {
+			update( delta );
 		});
-		updateLoop.start();
-		
 	}
 	
-	public void update()
+	public void update( float delta )
 	{
 		server.update();
 		for( ServerGameHandler s : states.values() )
 		{
-			s.update( this, server );
+			s.update( this, server, delta );
 		}
 	}
 	
@@ -80,6 +56,6 @@ public class SpaceCruiserServer
 	public interface ServerGameHandler
 	{
 		public void activate( SpaceCruiserServer s, NetworkServer n );
-		public void update( SpaceCruiserServer s, NetworkServer n );
+		public void update( SpaceCruiserServer s, NetworkServer n, float delta );
 	}
 }

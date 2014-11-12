@@ -1,11 +1,19 @@
-package space_cruiser_java;
+package com.danwink.space_cruiser;
 
-import com.badlogic.gdx.Gdx;
+import java.util.ArrayList;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.danwink.game_framework.network.NetworkMessager;
 import com.danwink.game_framework.network.NetworkMessager.ClassRegister;
+import com.danwink.space_cruiser.components.MapComponent;
+import com.danwink.space_cruiser.components.ShipComponent;
+import com.danwink.space_cruiser.game_objects.EntityPacket;
 import com.danwink.space_cruiser.game_objects.Ship;
-import com.esotericsoftware.kryo.Kryo;
+import com.danwink.space_cruiser.game_objects.ShipSize;
 import com.phyloa.dlib.math.Point2i;
 
 import game_framework.TileMap;
@@ -39,6 +47,14 @@ public class StaticFiles implements ClassRegister
 			TileMap.Wall[][].class,
 			
 			Point2i.class,
+			
+			EntityPacket.class,
+			ArrayList.class,
+			
+			MapComponent.class,
+			ShipComponent.class,
+			
+			ShipSize.class
 		});
 		
 		k.register( ServerMessages.class.getDeclaredClasses() );

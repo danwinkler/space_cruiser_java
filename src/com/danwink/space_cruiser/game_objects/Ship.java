@@ -1,11 +1,10 @@
 package com.danwink.space_cruiser.game_objects;
 
-import space_cruiser_java.StaticFiles;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.danwink.space_cruiser.StaticFiles;
 import com.phyloa.dlib.math.Point2i;
 
 import game_framework.TileMap;
@@ -28,24 +27,6 @@ public class Ship
 		map.setScale( 64 );
 	}
 	
-	public enum ShipSize
-	{
-		A( "A-Class", 12, 8 ),
-		B( "B-Class", 15, 10 ),
-		C( "C-Class", 20, 15 );
-		
-		String name;
-		int width;
-		int height;
-		
-		ShipSize( String name, int width, int height )
-		{
-			this.name = name;
-			this.width = width;
-			this.height = height;
-		}
-	}
-
 	public void renderGrid( ShapeRenderer sr, SpriteBatch batch, Vector3 mousePos )
 	{
 		sr.begin( ShapeType.Line );

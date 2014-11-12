@@ -1,4 +1,4 @@
-package space_cruiser_java;
+package com.danwink.space_cruiser;
 
 import game_framework.TileMap.Tile;
 
@@ -32,5 +32,11 @@ public class ServerMessages
 	public enum SpaceNavigate
 	{
 		
+	}
+	
+	public enum Ship
+	{
+		SHIP,
+		ENTITIES
 	}
 }

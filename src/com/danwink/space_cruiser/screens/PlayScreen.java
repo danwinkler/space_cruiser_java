@@ -12,7 +12,7 @@ public class PlayScreen extends ScreenManager
 	
 	public PlayScreen() 
 	{
-		add( "shipbuild", new ShipBuildSubScreen() );
+		add( "ship", new ShipSubScreen() );
 		add( "spacenavigate", new SpaceNavigateSubScreen() );
 	}
 	
@@ -21,6 +21,6 @@ public class PlayScreen extends ScreenManager
 	{
 		o.ifPresent( c -> client = (NetworkClient)c );
 		
-		activate( "shipbuild" );
+		activate( "ship", client );
 	}
 }

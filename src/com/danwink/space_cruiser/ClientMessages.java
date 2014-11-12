@@ -1,4 +1,4 @@
-package space_cruiser_java;
+package com.danwink.space_cruiser;
 
 import game_framework.TileMap.Tile;
 
@@ -27,5 +27,10 @@ public class ClientMessages
 			this.t = t;
 			this.p = p;
 		}
+	}
+	
+	public static enum Ship
+	{
+		JOIN,
 	}
 }

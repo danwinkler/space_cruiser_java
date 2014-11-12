@@ -6,7 +6,7 @@ import game_framework.Screen;
 
 import com.badlogic.gdx.InputProcessor;
 
-public class ShipViewSubScreen implements Screen, InputProcessor
+public class TemplateSubScreen implements Screen, InputProcessor
 {
 	public void render()
 	{

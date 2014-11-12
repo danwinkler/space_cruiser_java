@@ -2,11 +2,6 @@ package com.danwink.space_cruiser.screens;
 
 import java.util.Optional;
 
-import space_cruiser_java.ClientMessages;
-import space_cruiser_java.ServerMessages;
-import space_cruiser_java.ServerMessages.ShipBuild;
-import space_cruiser_java.ServerMessages.ShipBuildChangeTilePacket;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
@@ -23,6 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.danwink.game_framework.network.MessagePacket;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.network.NetworkMessager.MessageListener;
+import com.danwink.space_cruiser.ClientMessages;
+import com.danwink.space_cruiser.ServerMessages;
+import com.danwink.space_cruiser.ServerMessages.ShipBuild;
+import com.danwink.space_cruiser.ServerMessages.ShipBuildChangeTilePacket;
 import com.danwink.space_cruiser.game_objects.Ship;
 import com.danwink.space_cruiser.game_objects.Ship.Floor;
 import com.phyloa.dlib.math.Point2i;

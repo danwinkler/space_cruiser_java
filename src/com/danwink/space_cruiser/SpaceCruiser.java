@@ -1,4 +1,4 @@
-package space_cruiser_java;
+package com.danwink.space_cruiser;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import game_framework.ScreenManager;
 
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.screens.TitleScreen;
+import com.danwink.game_framework.screens.ServerConnectScreen;
 import com.danwink.space_cruiser.screens.PlayScreen;
 import com.danwink.space_cruiser.server.SpaceCruiserServer;
 
@@ -29,6 +30,15 @@ public class SpaceCruiser
 						e.printStackTrace();
 					}
 				});
+				
+				addButton( "Join Server", "connect" );
+			}});
+			
+			g.add( "connect", new ServerConnectScreen() {{
+				onSelect( address -> {
+					System.out.println( address );
+				});
+				setBackScreen( "title" );
 			}});
 			
 			g.add( "play", new PlayScreen() );
