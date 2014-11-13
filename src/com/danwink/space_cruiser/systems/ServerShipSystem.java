@@ -2,6 +2,7 @@ package com.danwink.space_cruiser.systems;
 
 import java.io.FileNotFoundException;
 
+import game_framework.SyncComponent;
 import game_framework.TileMap;
 
 import com.badlogic.ashley.core.Engine;
@@ -31,13 +32,6 @@ public class ServerShipSystem extends IteratingSystem
 		super( Family.getFor( ShipComponent.class ) );
 		
 		this.server = server;
-		
-		server.group( ShipServerHandler.class, g -> {
-			g.on( ClientMessages.Ship.JOIN, m -> {
-				Entity ship = getOwnShip();
-				server.sendTCP( m.getSender(), ServerMessages.Ship.SHIP, new EntityPacket( ship.getId(), ship.getComponents() ) );
-			});
-		});
 	}
 	
 	@Override
@@ -61,6 +55,7 @@ public class ServerShipSystem extends IteratingSystem
 		
 		ship.add( mc );
 		ship.add( new ShipComponent() );
+		ship.add( new SyncComponent( true ) );
 		
 		engine.addEntity( ship );
     }
@@ -68,10 +63,5 @@ public class ServerShipSystem extends IteratingSystem
 	protected void processEntity( Entity entity, float deltaTime )
 	{
 	
-	}
-	
-	public Entity getOwnShip()
-	{
-		return engine.getEntitiesFor( Family.getFor( ShipComponent.class ) ).get( 0 );
 	}
 }

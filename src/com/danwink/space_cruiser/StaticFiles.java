@@ -18,6 +18,7 @@ import com.danwink.space_cruiser.game_objects.Tiles;
 import com.danwink.space_cruiser.game_objects.Tiles.Floor;
 import com.phyloa.dlib.math.Point2i;
 
+import game_framework.SyncComponent;
 import game_framework.TileMap;
 
 public class StaticFiles implements ClassRegister
@@ -55,6 +56,7 @@ public class StaticFiles implements ClassRegister
 			
 			MapComponent.class,
 			ShipComponent.class,
+			SyncComponent.class,
 			
 			ShipSize.class
 		});

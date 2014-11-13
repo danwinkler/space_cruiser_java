@@ -24,21 +24,6 @@ public class ClientShipSystem extends IteratingSystem
 		super( Family.getFor( ShipComponent.class ) );
 		
 		this.client = client;
-		
-		client.group( ShipSubScreen.class, g -> {
-			g.on( ServerMessages.Ship.SHIP, (MessagePacket<EntityPacket> m) -> {
-				Entity ship = getOwnShip();
-				if( ship == null )
-				{
-					ship = new Entity();
-					engine.addEntity( ship );
-				}
-				for( Component c : m.getValue().components )
-				{
-					ship.add( c );
-				}
-			});
-		});
 	}
 	
 	@Override
@@ -51,12 +36,5 @@ public class ClientShipSystem extends IteratingSystem
 	protected void processEntity( Entity entity, float deltaTime )
 	{
 		
-	}
-	
-	public Entity getOwnShip()
-	{
-		ImmutableArray<Entity> entities = engine.getEntitiesFor( Family.getFor( ShipComponent.class ) );
-		if( entities.size() < 1 ) return null;
-		return entities.get( 0 );
 	}
 }

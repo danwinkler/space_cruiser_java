@@ -1,5 +1,7 @@
 package com.danwink.space_cruiser.screens;
 
+import game_framework.ClientEntitySyncSystem;
+
 import java.util.Optional;
 
 import com.badlogic.ashley.core.Engine;
@@ -32,6 +34,7 @@ public class ShipSubScreen extends BasicScreen
 		client.group( ShipSubScreen.class, g -> {
 			engine.addSystem( mrs = new MapRenderSystem( sr, batch ) );
 			engine.addSystem( new ClientShipSystem( client ) );
+			engine.addSystem( new ClientEntitySyncSystem( client, ShipSubScreen.class ) );
 		});
 		
 		client.sendTCP( ClientMessages.Ship.JOIN, null );
