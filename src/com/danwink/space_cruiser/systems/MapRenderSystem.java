@@ -49,9 +49,10 @@ public class MapRenderSystem extends IteratingSystem
 			}
 			sr.rect( x, y, w, h );
 		}, (wall,x,y,w,h,d) -> {
-			
+			sr.setColor( 1, 0, 1, 1 );
+			sr.rect( x, y, w, h );
 		}, (east,north,west,south,x,y,w,h) -> {
-			
+			sr.rect( x, y, w, h );
 		});
 		batch.end();
 		sr.end();

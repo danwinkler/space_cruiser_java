@@ -14,6 +14,7 @@ import com.danwink.space_cruiser.components.ShipComponent;
 import com.danwink.space_cruiser.game_objects.EntityPacket;
 import com.danwink.space_cruiser.game_objects.Ship;
 import com.danwink.space_cruiser.game_objects.ShipSize;
+import com.danwink.space_cruiser.game_objects.Tiles;
 import com.danwink.space_cruiser.game_objects.Tiles.Floor;
 import com.phyloa.dlib.math.Point2i;
 
@@ -47,8 +48,6 @@ public class StaticFiles implements ClassRegister
 			TileMap.Wall[].class,
 			TileMap.Wall[][].class,
 			
-			Floor.class,
-			
 			Point2i.class,
 			
 			EntityPacket.class,
@@ -63,5 +62,6 @@ public class StaticFiles implements ClassRegister
 		k.register( ServerMessages.class.getDeclaredClasses() );
 		k.register( ClientMessages.class.getDeclaredClasses() );
 		k.register( Ship.class.getDeclaredClasses() );
+		k.register( Tiles.class.getDeclaredClasses() );
 	}	
 }

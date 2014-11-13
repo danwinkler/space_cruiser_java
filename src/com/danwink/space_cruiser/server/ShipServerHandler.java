@@ -18,14 +18,6 @@ public class ShipServerHandler implements ServerGameHandler
 		engine = new Engine();
 		
 		engine.addSystem( new ServerShipSystem( server ) );
-		
-		/*
-		server.group( ShipServerHandler.class, g -> {
-			g.on( ClientMessages.Ship.JOIN, m -> {
-				server.sendTCP( m.getSender(), ServerMessages.Ship.SHIP, getOwnShip().getComponents() );
-			});
-		});
-		*/
 	}
 
 	public void update( SpaceCruiserServer s, NetworkServer n, float delta )

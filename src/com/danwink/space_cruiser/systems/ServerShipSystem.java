@@ -1,5 +1,7 @@
 package com.danwink.space_cruiser.systems;
 
+import java.io.FileNotFoundException;
+
 import game_framework.TileMap;
 
 import com.badlogic.ashley.core.Engine;
@@ -8,6 +10,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.danwink.game_framework.network.NetworkServer;
 import com.danwink.space_cruiser.ClientMessages;
+import com.danwink.space_cruiser.FileHelper;
 import com.danwink.space_cruiser.components.MapComponent;
 import com.danwink.space_cruiser.components.ShipComponent;
 import com.danwink.space_cruiser.server.ShipServerHandler;
@@ -15,6 +18,7 @@ import com.danwink.space_cruiser.ServerMessages;
 import com.danwink.space_cruiser.game_objects.EntityPacket;
 import com.danwink.space_cruiser.game_objects.ShipSize;
 import com.danwink.space_cruiser.game_objects.Tiles;
+import com.phyloa.dlib.util.DFile;
 
 public class ServerShipSystem extends IteratingSystem
 {
@@ -44,11 +48,17 @@ public class ServerShipSystem extends IteratingSystem
         
         Entity ship = new Entity();
         MapComponent mc = new MapComponent();
-        mc.size = ShipSize.A;
-        mc.map = new TileMap( mc.size.width+2, mc.size.height+2 ); //Extra size for exterior cosmetic tiles
-		mc.map.setScale( 64 );
+        try
+		{
+			mc.map = FileHelper.JSONtoTileMap( DFile.loadText( "testMap.json" ) );
+		}
+		catch( FileNotFoundException e )
+		{
+			e.printStackTrace();
+		}
 		
-		mc.map.setTile( new Tiles.Floor(), 2, 2 );
+        mc.map.setScale( 64 );
+		
 		ship.add( mc );
 		ship.add( new ShipComponent() );
 		
