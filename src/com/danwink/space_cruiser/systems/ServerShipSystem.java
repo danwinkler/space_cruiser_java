@@ -62,6 +62,6 @@ public class ServerShipSystem extends IteratingSystem
 
 	protected void processEntity( Entity entity, float deltaTime )
 	{
-	
+		
 	}
 }

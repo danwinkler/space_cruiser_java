@@ -3,8 +3,6 @@ package com.danwink.space_cruiser.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -22,7 +20,7 @@ public class MapRenderSystem extends IteratingSystem
 
 	public MapRenderSystem( ShapeRenderer sr, SpriteBatch batch )
 	{
-		super( Family.getFor( MapComponent.class ) );
+		super( Family.all( MapComponent.class ).get() );
 		
 		this.sr = sr;
 		this.batch = batch;

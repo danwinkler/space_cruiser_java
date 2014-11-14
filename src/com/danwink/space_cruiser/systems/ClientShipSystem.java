@@ -15,19 +15,15 @@ import com.danwink.space_cruiser.game_objects.EntityPacket;
 
 public class ClientShipSystem extends IteratingSystem
 {
-	public NetworkClient client;
-	
 	Engine engine;
 	
-	public ClientShipSystem( NetworkClient client )
+	public ClientShipSystem()
 	{
-		super( Family.getFor( ShipComponent.class ) );
-		
-		this.client = client;
+		super( Family.all( ShipComponent.class ).get() );
 	}
 	
 	@Override
-    public void addedToEngine(Engine engine) 
+    public void addedToEngine( Engine engine ) 
 	{
 		super.addedToEngine( engine );
         this.engine = engine;

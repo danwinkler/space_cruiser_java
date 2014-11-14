@@ -1,11 +1,16 @@
 package com.danwink.space_cruiser.components;
 
+import java.util.LinkedList;
+
 import com.badlogic.ashley.core.Component;
+import com.phyloa.dlib.math.Point2i;
 
 public class MoveComponent extends Component
 {
 	public float x, y;
 	public Direction facing;
+	public LinkedList<Point2i> path;
+	public long mapEntityId;
 	
 	public enum Direction
 	{
@@ -14,11 +19,22 @@ public class MoveComponent extends Component
 		EAST( 1, 0 ),
 		WEST( -1, 0 );
 		
-		int x, y;
+		public int x;
+		public int y;
+		
 		Direction( int x, int y )
 		{
 			this.x = x;
 			this.y = y;
+		}
+		
+		public static Direction fromCoords( int x, int y )
+		{
+			for( Direction d : values() )
+			{
+				if( d.x == x && d.y == y ) return d;
+			}
+			return null;
 		}
 	}
 }

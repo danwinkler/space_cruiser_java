@@ -190,6 +190,6 @@ public class FileHelper
 		DFile.saveText( "testMap.json", tileMapToJSON( m ) );
 		*/
 		TileMap m = JSONtoTileMap( DFile.loadText( "testMap.json" )  );
-		m.getClass();
+		m.toJson( t -> tileClassToInt.get( t == null ? null : t.getClass() ), w -> wallClassToInt.get( w == null ? null : w.getClass() ) );
 	}
 }

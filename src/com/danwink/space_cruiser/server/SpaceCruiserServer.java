@@ -12,7 +12,7 @@ public class SpaceCruiserServer
 {
 	NetworkServer server;
 	
-	HashMap<Class, ServerGameHandler> states = new HashMap<Class, ServerGameHandler>();
+	public HashMap<Class, ServerGameHandler> states = new HashMap<Class, ServerGameHandler>();
 	
 	GameLoop gl;
 	

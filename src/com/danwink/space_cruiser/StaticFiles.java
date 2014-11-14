@@ -1,6 +1,7 @@
 package com.danwink.space_cruiser;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.danwink.game_framework.network.NetworkMessager;
 import com.danwink.game_framework.network.NetworkMessager.ClassRegister;
 import com.danwink.space_cruiser.components.MapComponent;
+import com.danwink.space_cruiser.components.MoveComponent;
 import com.danwink.space_cruiser.components.ShipComponent;
 import com.danwink.space_cruiser.game_objects.EntityPacket;
 import com.danwink.space_cruiser.game_objects.Ship;
@@ -53,10 +55,13 @@ public class StaticFiles implements ClassRegister
 			
 			EntityPacket.class,
 			ArrayList.class,
+			LinkedList.class,
 			
 			MapComponent.class,
 			ShipComponent.class,
 			SyncComponent.class,
+			MoveComponent.class,
+			MoveComponent.Direction.class,
 			
 			ShipSize.class
 		});
