@@ -52,6 +52,33 @@ public class MapRenderSystem extends IteratingSystem
 		}, (east,north,west,south,x,y,w,h) -> {
 			sr.rect( x, y, w, h );
 		});
+		
+		/*
+		for( int x = 0; x < mc.map.width; x++ )
+		{
+			for( int y = 0; y < mc.map.height; y++ )
+			{
+				for( int dx = -1; dx <= 1; dx++ )
+				{
+					for( int dy = -1; dy <= 1; dy++ )
+					{
+						int nx = x+dx;
+						int ny = y+dy;
+						if( dx == 0 && dy == 0 ) continue;
+						if( dx != 0 && dy != 0 ) continue;
+						if( nx < 0 || nx >= mc.map.width || ny < 0 || ny >= mc.map.height ) continue;
+						
+						if( !mc.map.blocked( x, y, nx, ny ) )
+						{
+							sr.line( x*64+32, y*64+32, nx*64+32, ny*64+32 );
+							sr.triangle( nx*64+32, ny*64+32, x*64+32+10, y*64+32+10, x*64+32-10, y*64+32-10 );
+						}
+					}
+				}
+			}
+		}
+		*/
+		
 		batch.end();
 		sr.end();
 	}

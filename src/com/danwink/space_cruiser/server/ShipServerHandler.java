@@ -1,18 +1,25 @@
 package com.danwink.space_cruiser.server;
 
+import java.io.FileNotFoundException;
+
 import game_framework.ServerEntitySyncSystem;
 import game_framework.SyncComponent;
 import game_framework.SyncEngine;
+import game_framework.SyncReference;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.danwink.game_framework.network.NetworkServer;
+import com.danwink.space_cruiser.FileHelper;
+import com.danwink.space_cruiser.Mappers;
+import com.danwink.space_cruiser.components.MapComponent;
 import com.danwink.space_cruiser.components.MoveComponent;
+import com.danwink.space_cruiser.components.ShipComponent;
 import com.danwink.space_cruiser.server.SpaceCruiserServer.ServerGameHandler;
 import com.danwink.space_cruiser.systems.MoveSystem;
 import com.danwink.space_cruiser.systems.RandomMoverSystem;
 import com.danwink.space_cruiser.systems.ServerShipSystem;
+import com.phyloa.dlib.util.DFile;
 
 public class ShipServerHandler implements ServerGameHandler
 {
@@ -34,11 +41,34 @@ public class ShipServerHandler implements ServerGameHandler
 		engine.addSystem( new MoveSystem() );
 		engine.addSystem( new RandomMoverSystem() );
 		
-		Entity mover = new Entity();
-		mover.add( new SyncComponent( true ) );
-		mover.add( new MoveComponent() );
+		Entity ship = new Entity();
+        MapComponent mc = new MapComponent();
+        try
+		{
+			mc.map = FileHelper.JSONtoTileMap( DFile.loadText( "testMap.json" ) );
+		}
+		catch( FileNotFoundException e )
+		{
+			e.printStackTrace();
+		}
 		
-		engine.addEntity( mover );
+        mc.map.setScale( 64 );
+		
+		ship.add( mc );
+		ship.add( new ShipComponent() );
+		ship.add( new SyncComponent( true ) );
+		
+		engine.addEntity( ship );
+		
+		for( int i = 0; i < 1; i++ )
+		{
+			Entity mover = new Entity();
+			mover.add( new SyncComponent( true ) );
+			MoveComponent move = new MoveComponent();
+			move.map = SyncReference.from( ship, mc );
+			mover.add( move );
+			engine.addEntity( mover );
+		}
 	}
 
 	public void update( SpaceCruiserServer s, NetworkServer n, float delta )

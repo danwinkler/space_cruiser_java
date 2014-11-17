@@ -1,5 +1,7 @@
 package com.danwink.space_cruiser.components;
 
+import game_framework.SyncReference;
+
 import java.util.LinkedList;
 
 import com.badlogic.ashley.core.Component;
@@ -10,7 +12,7 @@ public class MoveComponent extends Component
 	public float x, y;
 	public Direction facing;
 	public LinkedList<Point2i> path;
-	public long mapEntityId;
+	public SyncReference<MapComponent> map;
 	
 	public enum Direction
 	{

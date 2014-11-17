@@ -3,12 +3,11 @@ package com.danwink.space_cruiser.systems;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.newdawn.slick.util.pathfinding.AStarPathFinder;
-import org.newdawn.slick.util.pathfinding.Path;
-import org.newdawn.slick.util.pathfinding.PathFinder;
-
 import game_framework.BetterIteratingSystem;
+import game_framework.ServerEntitySyncSystem;
+import game_framework.SyncComponent;
 import game_framework.SyncEngine;
+import game_framework.TileMapPathFinder;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -22,7 +21,7 @@ import com.phyloa.dlib.util.DMath;
 
 public class RandomMoverSystem extends BetterIteratingSystem
 {
-	HashMap<MapComponent, PathFinder> finders = new HashMap<MapComponent, PathFinder>();
+	HashMap<MapComponent, TileMapPathFinder> finders = new HashMap<MapComponent, TileMapPathFinder>();
 	
 	public RandomMoverSystem()
 	{
@@ -34,37 +33,38 @@ public class RandomMoverSystem extends BetterIteratingSystem
 		MoveComponent move = Mappers.move.get( entity );
 		if( move.path == null )
 		{
-			MapComponent map = Mappers.map.get( ((SyncEngine)getEngine()).getBySyncId( move.mapEntityId ) );
-			PathFinder finder = getFinder( map );
-			Path p = null;
+			MapComponent map = move.map.get();
+			TileMapPathFinder finder = getFinder( map );
+			LinkedList<Point2i> p = null;
 			Point2i tileSpace = null;
-			do
-			{
-				tileSpace = map.map.worldToTileSpace( move.x, move.y );
-				if( map.map.blocked( null, tileSpace.x, tileSpace.y ) )
-				{
-					move.x = DMath.randomi( 0, map.map.width ) * map.map.scale;
-					move.y = DMath.randomi( 0, map.map.height ) * map.map.scale;
-					continue;
-				}
-				p = finder.findPath( null, tileSpace.x, tileSpace.y, DMath.randomi( 0, map.map.width ), DMath.randomi( 0, map.map.height ) );
-			} while( p == null );
 			
-			move.path = new LinkedList<Point2i>();
-			for( int i = 0; i < p.getLength(); i++ )
+			tileSpace = map.map.worldToTileSpace( move.x, move.y );
+			if( map.map.blocked( tileSpace.x, tileSpace.y ) )
 			{
-				move.path.addLast( new Point2i( p.getX( i ), p.getY( i ) ) );
-				move.facing = Direction.fromCoords( p.getX(1)-p.getX(0), p.getY(1)-p.getY(0) );
+				move.x = DMath.randomi( 0, map.map.width ) * map.map.scale + map.map.scale*.5f;
+				move.y = DMath.randomi( 0, map.map.height ) * map.map.scale + map.map.scale*.5f;
+				tileSpace = map.map.worldToTileSpace( move.x, move.y );
 			}
+			
+			p = finder.findPath( tileSpace.x, tileSpace.y, DMath.randomi( 0, map.map.width ), DMath.randomi( 0, map.map.height ) );
+			if( p == null || p.size() <= 1 ) return;
+			
+			Point2i a = p.getFirst();
+			Point2i b = p.get( 1 );
+			move.facing = Direction.fromCoords( b.x-a.x, b.y-a.y );
+			
+			move.path = p;
+			SyncComponent sc = ServerEntitySyncSystem.syncMapper.get( entity );
+			sc.sync = move;
 		}
 	}
 	
-	PathFinder getFinder( MapComponent map )
+	TileMapPathFinder getFinder( MapComponent map )
 	{
-		PathFinder finder = finders.get( map );
+		TileMapPathFinder finder = finders.get( map );
 		if( finder == null )
 		{
-			finder = new AStarPathFinder( map.map, (map.map.width + map.map.height) * 5, false );
+			finder = new TileMapPathFinder( map.map );
 			finders.put( map, finder );
 		}
 		return finder;

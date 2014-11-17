@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.components.MoveComponent;
+import com.phyloa.dlib.math.Point2i;
 
 public class MoveRenderSystem extends IteratingSystem
 {	
@@ -28,6 +29,19 @@ public class MoveRenderSystem extends IteratingSystem
 		
 		sr.begin( ShapeType.Line );
 		sr.circle( move.x, move.y, 10 );
+		
+		if( move.path != null ) 
+		{
+			Point2i last = null;
+			for( Point2i p : move.path )
+			{
+				if( last != null )
+				{
+					sr.line( last.x * 64 + 32, last.y * 64 + 32, p.x * 64 + 32, p.y * 64 + 32 );
+				}
+				last = p;
+			}
+		}
 		sr.end();
 	}
 }

@@ -1,9 +1,10 @@
 package com.danwink.space_cruiser.server;
 
-import game_framework.InfiniteChunkManager;
+import com.danwink.space_cruiser.components.MapComponent;
+import com.danwink.space_cruiser.components.StarMapComponent;
 
 public class ServerGameState
 {
-	InfiniteChunkManager space;
-	
+	MapComponent playerShip;
+	StarMapComponent starMap;
 }

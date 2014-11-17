@@ -39,4 +39,9 @@ public class ServerMessages
 		SHIP,
 		ENTITIES
 	}
+	
+	public enum StarMap
+	{
+		VIEW
+	}
 }

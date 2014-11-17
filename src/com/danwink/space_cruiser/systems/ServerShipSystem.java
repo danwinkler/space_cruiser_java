@@ -39,25 +39,6 @@ public class ServerShipSystem extends IteratingSystem
 	{
 		super.addedToEngine( engine );
         this.engine = engine;
-        
-        Entity ship = new Entity();
-        MapComponent mc = new MapComponent();
-        try
-		{
-			mc.map = FileHelper.JSONtoTileMap( DFile.loadText( "testMap.json" ) );
-		}
-		catch( FileNotFoundException e )
-		{
-			e.printStackTrace();
-		}
-		
-        mc.map.setScale( 64 );
-		
-		ship.add( mc );
-		ship.add( new ShipComponent() );
-		ship.add( new SyncComponent( true ) );
-		
-		engine.addEntity( ship );
     }
 
 	protected void processEntity( Entity entity, float deltaTime )

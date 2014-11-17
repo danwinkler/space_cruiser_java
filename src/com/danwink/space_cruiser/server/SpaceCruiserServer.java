@@ -22,8 +22,6 @@ public class SpaceCruiserServer
 	{
 		server = new NetworkServer( StaticFiles.get() );
 		
-		states.put( ShipBuildServerHandler.class, new ShipBuildServerHandler() );
-		states.put( SpaceNavigateServerHandler.class, new SpaceNavigateServerHandler() );
 		states.put( ShipServerHandler.class, new ShipServerHandler() );
 	}
 	

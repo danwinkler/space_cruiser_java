@@ -30,7 +30,7 @@ public class MoveSystem extends BetterIteratingSystem
 		
 		if( move.path != null )
 		{
-			MapComponent map = Mappers.map.get( ((SyncEngine)getEngine()).getBySyncId( move.mapEntityId ) );
+			MapComponent map = move.map.get();
 			
 			Point2i current = move.path.getFirst();
 			Point2i next = move.path.get( 1 );
