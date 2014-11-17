@@ -40,11 +40,10 @@ public class MoveSystem extends BetterIteratingSystem
 				move.facing = Direction.fromCoords( next.x - current.x, next.y - current.y );
 			}
 			
-			move.x += (next.x - current.x) * speed * delta;
-			move.y += (next.y - current.y) * speed * delta;
+			move.pos.add( (next.x - current.x) * speed * delta, (next.y - current.y) * speed * delta );
 			
-			float dx = (move.x/map.map.scale) - (next.x+.5f);
-			float dy = (move.y/map.map.scale) - (next.y+.5f);
+			float dx = (move.pos.x/map.map.scale) - (next.x+.5f);
+			float dy = (move.pos.y/map.map.scale) - (next.y+.5f);
 			
 			if( dx * move.facing.x >= 0 && dy * move.facing.y >= 0 )
 			{
@@ -59,8 +58,8 @@ public class MoveSystem extends BetterIteratingSystem
 					next = move.path.get( 1 );
 					
 					move.facing = MoveComponent.Direction.fromCoords( next.x - current.x, next.y - current.y );
-					move.x = current.x * map.map.scale + map.map.scale*.5f;
-					move.y = current.y * map.map.scale + map.map.scale*.5f;
+					move.pos.x = current.x * map.map.scale + map.map.scale*.5f;
+					move.pos.y = current.y * map.map.scale + map.map.scale*.5f;
 				}
 			}
 		}

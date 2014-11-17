@@ -41,6 +41,16 @@ public class ShipServerHandler implements ServerGameHandler
 		engine.addSystem( new MoveSystem() );
 		engine.addSystem( new RandomMoverSystem() );
 		
+		initializeGameState();
+	}
+
+	public void update( SpaceCruiserServer s, NetworkServer n, float delta )
+	{
+		engine.update( delta );
+	}
+	
+	public void initializeGameState()
+	{
 		Entity ship = new Entity();
         MapComponent mc = new MapComponent();
         try
@@ -69,10 +79,5 @@ public class ShipServerHandler implements ServerGameHandler
 			mover.add( move );
 			engine.addEntity( mover );
 		}
-	}
-
-	public void update( SpaceCruiserServer s, NetworkServer n, float delta )
-	{
-		engine.update( delta );
 	}
 }

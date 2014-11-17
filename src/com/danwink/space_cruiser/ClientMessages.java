@@ -33,4 +33,9 @@ public class ClientMessages
 	{
 		JOIN,
 	}
+	
+	public static enum StarMap
+	{
+		VIEW
+	}
 }

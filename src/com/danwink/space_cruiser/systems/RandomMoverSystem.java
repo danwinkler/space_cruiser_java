@@ -38,12 +38,12 @@ public class RandomMoverSystem extends BetterIteratingSystem
 			LinkedList<Point2i> p = null;
 			Point2i tileSpace = null;
 			
-			tileSpace = map.map.worldToTileSpace( move.x, move.y );
+			tileSpace = map.map.worldToTileSpace( move.pos.x, move.pos.y );
 			if( map.map.blocked( tileSpace.x, tileSpace.y ) )
 			{
-				move.x = DMath.randomi( 0, map.map.width ) * map.map.scale + map.map.scale*.5f;
-				move.y = DMath.randomi( 0, map.map.height ) * map.map.scale + map.map.scale*.5f;
-				tileSpace = map.map.worldToTileSpace( move.x, move.y );
+				move.pos.x = DMath.randomi( 0, map.map.width ) * map.map.scale + map.map.scale*.5f;
+				move.pos.y = DMath.randomi( 0, map.map.height ) * map.map.scale + map.map.scale*.5f;
+				tileSpace = map.map.worldToTileSpace( move.pos.x, move.pos.y );
 			}
 			
 			p = finder.findPath( tileSpace.x, tileSpace.y, DMath.randomi( 0, map.map.width ), DMath.randomi( 0, map.map.height ) );

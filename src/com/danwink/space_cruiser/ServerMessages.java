@@ -42,6 +42,6 @@ public class ServerMessages
 	
 	public enum StarMap
 	{
-		VIEW
+		CHUNK
 	}
 }

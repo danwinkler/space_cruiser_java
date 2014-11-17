@@ -5,11 +5,12 @@ import game_framework.SyncReference;
 import java.util.LinkedList;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 import com.phyloa.dlib.math.Point2i;
 
 public class MoveComponent extends Component
 {
-	public float x, y;
+	public Vector2 pos = new Vector2();
 	public Direction facing;
 	public LinkedList<Point2i> path;
 	public SyncReference<MapComponent> map;

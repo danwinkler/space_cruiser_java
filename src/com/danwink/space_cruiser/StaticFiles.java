@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.danwink.game_framework.network.NetworkMessager;
 import com.danwink.game_framework.network.NetworkMessager.ClassRegister;
@@ -53,6 +54,8 @@ public class StaticFiles implements ClassRegister
 			TileMap.Wall[][].class,
 			
 			Point2i.class,
+			
+			Vector2.class,
 			
 			EntityPacket.class,
 			ArrayList.class,

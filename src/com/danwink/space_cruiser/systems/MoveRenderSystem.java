@@ -28,7 +28,7 @@ public class MoveRenderSystem extends IteratingSystem
 		MoveComponent move = Mappers.move.get( entity );
 		
 		sr.begin( ShapeType.Line );
-		sr.circle( move.x, move.y, 10 );
+		sr.circle( move.pos.x, move.pos.y, 10 );
 		
 		if( move.path != null ) 
 		{

@@ -5,11 +5,11 @@ import game_framework.SyncReference;
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 
 public class StarSystemComponent extends Component
 {
-	float x, y;
+	public Vector2 pos;
 	public String name;
-	
-	ArrayList<SyncReference<StarSystemComponent>> connectedStars;
+	public ArrayList<SyncReference<StarSystemComponent>> connectedStars;
 }

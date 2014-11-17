@@ -6,5 +6,8 @@ import com.badlogic.ashley.core.Component;
 
 public class StarMapComponent extends Component
 {
-	InfiniteChunkManager<StarMapChunkComponent> icm;
+	public static final float mapViewRadius = 100; 
+	
+	//This isn't a sync reference because we are never going to send the Star Map Component over the network in it's entirety
+	public InfiniteChunkManager<StarMapChunkComponent> icm;
 }
