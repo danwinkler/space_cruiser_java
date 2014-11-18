@@ -29,6 +29,7 @@ import com.danwink.space_cruiser.server.SpaceCruiserServer.ServerGameHandler;
 import com.danwink.space_cruiser.systems.MoveSystem;
 import com.danwink.space_cruiser.systems.server.RandomMoverSystem;
 import com.danwink.space_cruiser.systems.server.ServerShipSystem;
+import com.danwink.space_cruiser.systems.server.ServerStarMapSystem;
 import com.phyloa.dlib.math.Point2i;
 import com.phyloa.dlib.util.DFile;
 import com.phyloa.dlib.util.DMath;
@@ -52,6 +53,8 @@ public class ShipServerHandler implements ServerGameHandler
 		
 		engine.addSystem( new MoveSystem() );
 		engine.addSystem( new RandomMoverSystem() );
+		
+		engine.addSystem( new ServerStarMapSystem( server ) );
 		
 		initializeGameState();
 	}
@@ -100,6 +103,7 @@ public class ShipServerHandler implements ServerGameHandler
 		starMap.icm = new InfiniteChunkManager<StarMapChunkComponent>( StarMapChunkComponent.class, StarMapComponent.chunkSize, StarMapComponent.chunkSize );
 		
 		//TODO: refactor out into it's own class
+		//TODO: SO MUCH ROOM FOR REFACTORING
 		//TODO: seems like all of the entity creation craziness in here could be abstracted
 		//		Possibly like a public Entity createSyncEntity( Component c ) in SyncEngine that 
 		//		Creates a new sync entity with the specified component and a SyncComponent
@@ -150,6 +154,22 @@ public class ShipServerHandler implements ServerGameHandler
 					}
 					
 					chunk.stars.add( SyncReference.from( starEntity, star ) );
+				}
+				
+				for( SyncReference<StarSystemComponent> star1Ref : chunk.stars )
+				{
+					StarSystemComponent star1 = star1Ref.get();
+					for( SyncReference<StarSystemComponent> star2Ref : chunk.stars )
+					{
+						StarSystemComponent star2 = star2Ref.get();
+						Vector2 distance = star1.pos.cpy();
+						distance.sub( star2.pos );
+						if( distance.len2() < StarMapComponent.connectDistance*StarMapComponent.connectDistance )
+						{
+							star1.connectedStars.add( star2Ref );
+							star2.connectedStars.add( star1Ref );
+						}
+					}
 				}
 				
 				chunkEntity.add( chunk );

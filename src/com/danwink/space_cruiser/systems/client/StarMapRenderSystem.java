@@ -41,7 +41,7 @@ public class StarMapRenderSystem extends IteratingSystem
 		Entity shipEntity = engine.getEntitiesFor( Family.all( PlayerShipComponent.class ).get() ).first();
 		ShipComponent playerShip = Mappers.ship.get( shipEntity );
 		StarSystemComponent ssc = playerShip.starSystemLocation.get();
-		
+				
 		StarMapComponent starMap = Mappers.starmap.get( entity );
 		Layer<StarMapChunkComponent> l = starMap.icm.getLayer( "main" );
 		l.resetIterator( ssc.pos.x - StarMapComponent.mapViewRadius, ssc.pos.y - StarMapComponent.mapViewRadius, StarMapComponent.mapViewRadius*2, StarMapComponent.mapViewRadius*2 );
@@ -51,13 +51,23 @@ public class StarMapRenderSystem extends IteratingSystem
 			StarMapChunkComponent chunk = l.next();
 			if( chunk == null ) 
 			{
-				System.out.println( "null chunk" );
 				continue;	
 			}
 			for( SyncReference<StarSystemComponent> starRef : chunk.stars )
 			{
 				StarSystemComponent star = starRef.get();
-				sr.circle( star.pos.x, star.pos.y, 10 );
+				if( star != null )
+				{
+					sr.circle( star.pos.x, star.pos.y, 10 );
+					for( SyncReference<StarSystemComponent> otherStarRef : star.connectedStars )
+					{
+						StarSystemComponent otherStar = otherStarRef.get();
+						if( otherStar != null )
+						{
+							sr.line( star.pos, otherStar.pos );
+						}
+					}
+				}
 			}
 		}
 		sr.end();
