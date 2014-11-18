@@ -1,4 +1,4 @@
-package com.danwink.space_cruiser.systems;
+package com.danwink.space_cruiser.systems.client;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -30,56 +30,24 @@ public class MapRenderSystem extends IteratingSystem
 	{
 		MapComponent mc = Mappers.map.get( entity );
 		
-		sr.begin( ShapeType.Line );
 		batch.begin();
-		mc.map.render( (t,x,y,w,h) -> {
+		mc.map.renderTiles( (t,x,y,w,h) -> {
 			if( t != null )
 			{
 				batch.draw( StaticFiles.floor, x, y );
 			}
-			if( mousePos.x > x && mousePos.x < x+w && mousePos.y > y && mousePos.y < y+h )
-			{
-				sr.setColor( 1, 0, 0, 1 );
-			}
-			else
-			{
-				sr.setColor( 1, 1, 1, 1 );
-			}
-			sr.rect( x, y, w, h );
-		}, (wall,x,y,w,h,d) -> {
+		});
+		batch.end();
+		
+		sr.begin( ShapeType.Filled );
+		mc.map.renderWalls( (wall,x,y,w,h,d) -> {
 			sr.setColor( 1, 0, 1, 1 );
 			sr.rect( x, y, w, h );
-		}, (east,north,west,south,x,y,w,h) -> {
+		});
+		mc.map.renderWallJoints( (east,north,west,south,x,y,w,h) -> {
 			sr.rect( x, y, w, h );
 		});
 		
-		/*
-		for( int x = 0; x < mc.map.width; x++ )
-		{
-			for( int y = 0; y < mc.map.height; y++ )
-			{
-				for( int dx = -1; dx <= 1; dx++ )
-				{
-					for( int dy = -1; dy <= 1; dy++ )
-					{
-						int nx = x+dx;
-						int ny = y+dy;
-						if( dx == 0 && dy == 0 ) continue;
-						if( dx != 0 && dy != 0 ) continue;
-						if( nx < 0 || nx >= mc.map.width || ny < 0 || ny >= mc.map.height ) continue;
-						
-						if( !mc.map.blocked( x, y, nx, ny ) )
-						{
-							sr.line( x*64+32, y*64+32, nx*64+32, ny*64+32 );
-							sr.triangle( nx*64+32, ny*64+32, x*64+32+10, y*64+32+10, x*64+32-10, y*64+32-10 );
-						}
-					}
-				}
-			}
-		}
-		*/
-		
-		batch.end();
 		sr.end();
 	}
 	

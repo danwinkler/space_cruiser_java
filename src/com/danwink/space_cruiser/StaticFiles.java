@@ -3,23 +3,17 @@ package com.danwink.space_cruiser;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.danwink.game_framework.network.NetworkMessager;
 import com.danwink.game_framework.network.NetworkMessager.ClassRegister;
-import com.danwink.space_cruiser.components.MapComponent;
-import com.danwink.space_cruiser.components.MoveComponent;
-import com.danwink.space_cruiser.components.ShipComponent;
+
 import com.danwink.space_cruiser.game_objects.EntityPacket;
-import com.danwink.space_cruiser.game_objects.Ship;
 import com.danwink.space_cruiser.game_objects.ShipSize;
 import com.danwink.space_cruiser.game_objects.Tiles;
-import com.danwink.space_cruiser.game_objects.Tiles.Floor;
 import com.phyloa.dlib.math.Point2i;
+
+import com.danwink.space_cruiser.components.*;
 
 import game_framework.SyncComponent;
 import game_framework.SyncReference;
@@ -43,8 +37,6 @@ public class StaticFiles implements ClassRegister
 	public void register( NetworkMessager k )
 	{
 		k.register( new Class[] {
-			Ship.class,
-			
 			TileMap.class,
 			TileMap.Tile.class,
 			TileMap.Tile[].class,
@@ -65,6 +57,9 @@ public class StaticFiles implements ClassRegister
 			ShipComponent.class,
 			MoveComponent.class,
 			MoveComponent.Direction.class,
+			PlayerShipComponent.class,
+			StarSystemComponent.class,
+			StarMapChunkComponent.class,
 			
 			SyncComponent.class,
 			SyncReference.class,
@@ -76,7 +71,6 @@ public class StaticFiles implements ClassRegister
 		
 		k.register( ServerMessages.class.getDeclaredClasses() );
 		k.register( ClientMessages.class.getDeclaredClasses() );
-		k.register( Ship.class.getDeclaredClasses() );
 		k.register( Tiles.class.getDeclaredClasses() );
 	}	
 }

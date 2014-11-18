@@ -1,11 +1,13 @@
 package com.danwink.space_cruiser.screens;
 
 import game_framework.ClientEntitySyncSystem;
+import game_framework.InfiniteChunkManager;
 import game_framework.ScreenManager;
 import game_framework.SyncEngine;
 
 import java.util.Optional;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,10 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.screens.BasicScreen;
 import com.danwink.space_cruiser.ClientMessages;
-import com.danwink.space_cruiser.systems.MapRenderSystem;
-import com.danwink.space_cruiser.systems.ClientShipSystem;
-import com.danwink.space_cruiser.systems.MoveRenderSystem;
+import com.danwink.space_cruiser.components.StarMapChunkComponent;
+import com.danwink.space_cruiser.components.StarMapComponent;
 import com.danwink.space_cruiser.systems.MoveSystem;
+import com.danwink.space_cruiser.systems.client.ClientShipSystem;
+import com.danwink.space_cruiser.systems.client.MapRenderSystem;
+import com.danwink.space_cruiser.systems.client.MoveRenderSystem;
 
 public class PlayScreen extends BasicScreen
 {
@@ -44,6 +48,14 @@ public class PlayScreen extends BasicScreen
 		
 		engine.addSystem( new MoveSystem() );
 		engine.addSystem( new MoveRenderSystem( sr, batch ) );
+		
+		Entity starMapEntity = new Entity();
+		StarMapComponent starMap = new StarMapComponent();
+		starMap.icm = new InfiniteChunkManager<StarMapChunkComponent>( StarMapChunkComponent.class, StarMapComponent.chunkSize, StarMapComponent.chunkSize );
+		starMap.icm.newLayer( "main" );
+		starMapEntity.add( starMap );
+		
+		engine.addEntity( starMapEntity );
 		
 		client.sendTCP( ClientMessages.Ship.JOIN, null );
 		

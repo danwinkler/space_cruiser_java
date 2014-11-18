@@ -1,4 +1,4 @@
-package com.danwink.space_cruiser.systems;
+package com.danwink.space_cruiser.systems.client;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;

@@ -8,19 +8,33 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.screens.OverlayScreen;
+import com.danwink.space_cruiser.ClientMessages;
+import com.danwink.space_cruiser.systems.client.StarMapRenderSystem;
 
 public class StarMapOverlay extends OverlayScreen
 {
+	private SyncEngine engine;
+	private NetworkClient client;
+	
+	StarMapRenderSystem smr;
+
 	public StarMapOverlay( SyncEngine engine, NetworkClient client )
 	{
 		super( 100 );
 		
+		this.engine = engine;
+		this.client = client;
+		
+		engine.addSystem( smr = new StarMapRenderSystem() );
+		smr.setProcessing( false );
 	}
 
 	public void activate( Optional<Object> o )
 	{		
 		table.add( new TextButton( "hello", skin ) );
 		table.bottom().right();
+		
+		client.sendTCP( ClientMessages.StarMap.VIEW, null );
 	}
 
 	public void render()
@@ -31,6 +45,8 @@ public class StarMapOverlay extends OverlayScreen
 		sr.rect( 0, 0, width, height );
 		sr.rect( 10, 10, 40, 40 );
 		sr.end();
+		
+		smr.update( 0 );
 	}
 
 	public void exit()
@@ -40,6 +56,7 @@ public class StarMapOverlay extends OverlayScreen
 
 	public void resize( int width, int height )
 	{
+		
 	}
 	
 	public boolean keyDown( int keycode )

@@ -1,4 +1,4 @@
-package com.danwink.space_cruiser.systems;
+package com.danwink.space_cruiser.systems.server;
 
 import game_framework.InfiniteChunkManager.Layer;
 

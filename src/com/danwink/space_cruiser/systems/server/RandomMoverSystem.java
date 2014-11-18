@@ -1,4 +1,4 @@
-package com.danwink.space_cruiser.systems;
+package com.danwink.space_cruiser.systems.server;
 
 import java.util.HashMap;
 import java.util.LinkedList;
