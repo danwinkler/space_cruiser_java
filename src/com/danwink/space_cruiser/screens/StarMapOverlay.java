@@ -4,6 +4,7 @@ import game_framework.SyncEngine;
 
 import java.util.Optional;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.danwink.game_framework.network.NetworkClient;
@@ -24,13 +25,13 @@ public class StarMapOverlay extends OverlayScreen
 		
 		this.engine = engine;
 		this.client = client;
-		
-		engine.addSystem( smr = new StarMapRenderSystem( this ) );
-		smr.setProcessing( false );
 	}
 
 	public void activate( Optional<Object> o )
 	{		
+		engine.addSystem( smr = new StarMapRenderSystem( this, sr, batch ) );
+		smr.setProcessing( false );
+		
 		table.add( new TextButton( "hello", skin ) );
 		table.bottom().right();
 		
@@ -44,7 +45,7 @@ public class StarMapOverlay extends OverlayScreen
 		sr.begin( ShapeType.Line );
 		sr.rect( 1, 1, width-1, height-1 );
 		sr.end();
-		
+			
 		smr.update( 0 );
 	}
 

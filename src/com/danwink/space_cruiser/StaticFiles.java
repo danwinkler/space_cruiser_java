@@ -2,17 +2,16 @@ package com.danwink.space_cruiser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.danwink.game_framework.network.NetworkMessager;
 import com.danwink.game_framework.network.NetworkMessager.ClassRegister;
-
 import com.danwink.space_cruiser.game_objects.EntityPacket;
 import com.danwink.space_cruiser.game_objects.ShipSize;
 import com.danwink.space_cruiser.game_objects.Tiles;
 import com.phyloa.dlib.math.Point2i;
-
 import com.danwink.space_cruiser.components.*;
 
 import game_framework.SyncComponent;
@@ -52,6 +51,7 @@ public class StaticFiles implements ClassRegister
 			EntityPacket.class,
 			ArrayList.class,
 			LinkedList.class,
+			CopyOnWriteArrayList.class,
 			
 			MapComponent.class,
 			ShipComponent.class,

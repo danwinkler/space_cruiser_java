@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -30,11 +31,14 @@ public class StarMapRenderSystem extends IteratingSystem
 
 	private StarMapOverlay overlay;
 	
-	public StarMapRenderSystem( StarMapOverlay overlay )
+	public StarMapRenderSystem( StarMapOverlay overlay, ShapeRenderer sr, SpriteBatch batch )
 	{
 		super( Family.all( StarMapComponent.class ).get() );
 		
 		this.overlay = overlay;
+		
+		this.sr = sr;
+		this.batch = batch;
 	}
 
 	@Override
@@ -43,10 +47,7 @@ public class StarMapRenderSystem extends IteratingSystem
 		super.addedToEngine( engine );
 		this.engine = engine;
 		
-		sr = new ShapeRenderer();
-		batch = new SpriteBatch();
-		font = new BitmapFont();
-		
+		font = new BitmapFont( true );
 	}
 	
 	protected void processEntity( Entity entity, float deltaTime )
@@ -63,12 +64,19 @@ public class StarMapRenderSystem extends IteratingSystem
 		float vw = StarMapComponent.mapViewRadius*2;
 		float vh = StarMapComponent.mapViewRadius*2;
 		
-		//TODO: figure out a better way to do this junk. What a mess
-		sr.translate( -ssc.pos.x + overlay.width*.5f + overlay.margin, -ssc.pos.y + overlay.height*.5f + overlay.margin, 0 );
+		float xOffset = -ssc.pos.x + overlay.width*.5f;
+		float yOffset = -ssc.pos.y + overlay.height*.5f;
+		
+		float xMouse = Gdx.input.getX() - xOffset - overlay.margin;
+		float yMouse = Gdx.input.getY() - yOffset - overlay.margin;
+		
+		Matrix4 oldTransform = sr.getTransformMatrix().cpy();
+		
+		sr.translate( xOffset, yOffset, 0 );
 		batch.setTransformMatrix( sr.getTransformMatrix() );
 		
 		l.resetIterator( vx, vy, vw, vh );
-		sr.begin( ShapeType.Filled );
+		sr.begin( ShapeType.Line );
 		while( l.hasNext() )
 		{
 			StarMapChunkComponent chunk = l.next();
@@ -76,12 +84,20 @@ public class StarMapRenderSystem extends IteratingSystem
 			{
 				continue;	
 			}
+			
+			sr.rect( chunk.pos.x * StarMapComponent.chunkSize, chunk.pos.y * StarMapComponent.chunkSize, StarMapComponent.chunkSize, StarMapComponent.chunkSize );
+			
 			for( SyncReference<StarSystemComponent> starRef : chunk.stars )
 			{
 				StarSystemComponent star = starRef.get();
 				if( star != null )
 				{
-					if( star == ssc )
+					if( star.pos.dst2( xMouse, yMouse ) < 20*20 )
+					{
+						sr.setColor( 1, 0, 0, 1 );
+						sr.circle( star.pos.x, star.pos.y, StarMapComponent.connectDistance );
+					}
+					else if( star == ssc )
 					{
 						sr.setColor( 0, 1, 0, 1 );
 					}
@@ -90,7 +106,7 @@ public class StarMapRenderSystem extends IteratingSystem
 						sr.setColor( 1, 1, 1, 1 );
 					}
 					sr.circle( star.pos.x, star.pos.y, 10 );
-					
+				
 					for( SyncReference<StarSystemComponent> otherStarRef : star.connectedStars )
 					{
 						StarSystemComponent otherStar = otherStarRef.get();
@@ -124,6 +140,7 @@ public class StarMapRenderSystem extends IteratingSystem
 		}
 		batch.end();
 		
-		sr.setTransformMatrix( new Matrix4() );
+		sr.setTransformMatrix( oldTransform );
+		batch.setTransformMatrix( oldTransform );
 	}
 }
