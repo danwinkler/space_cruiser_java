@@ -7,7 +7,6 @@ zeta
 eta
 theta
 iota
-kappa
 lambda
 mu
 nu
@@ -17,7 +16,6 @@ pi
 rho
 sigma
 tau
-upsilon
 phi
 chi
 psi

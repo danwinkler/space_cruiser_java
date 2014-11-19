@@ -25,7 +25,7 @@ public class StarMapOverlay extends OverlayScreen
 		this.engine = engine;
 		this.client = client;
 		
-		engine.addSystem( smr = new StarMapRenderSystem() );
+		engine.addSystem( smr = new StarMapRenderSystem( this ) );
 		smr.setProcessing( false );
 	}
 
@@ -42,8 +42,7 @@ public class StarMapOverlay extends OverlayScreen
 		sr.setColor( 1, 1, 1, 1 );
 		
 		sr.begin( ShapeType.Line );
-		sr.rect( 0, 0, width, height );
-		sr.rect( 10, 10, 40, 40 );
+		sr.rect( 1, 1, width-1, height-1 );
 		sr.end();
 		
 		smr.update( 0 );
@@ -52,6 +51,8 @@ public class StarMapOverlay extends OverlayScreen
 	public void exit()
 	{
 		sr.dispose();
+		
+		engine.removeSystem( smr );
 	}
 
 	public void resize( int width, int height )
