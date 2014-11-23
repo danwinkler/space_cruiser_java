@@ -1,9 +1,7 @@
 package com.danwink.space_cruiser.screens;
 
-import game_framework.ClientEntitySyncSystem;
 import game_framework.InfiniteChunkManager;
 import game_framework.ScreenManager;
-import game_framework.SyncEngine;
 
 import java.util.Optional;
 
@@ -13,9 +11,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.danwink.game_framework.network.ClientEntitySyncSystem;
 import com.danwink.game_framework.network.NetworkClient;
 import com.danwink.game_framework.network.NetworkServer;
 import com.danwink.game_framework.network.Subscription;
+import com.danwink.game_framework.network.SyncEngine;
 import com.danwink.game_framework.screens.BasicScreen;
 import com.danwink.space_cruiser.ClientMessages;
 import com.danwink.space_cruiser.components.StarMapChunkComponent;

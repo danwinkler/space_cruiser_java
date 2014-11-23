@@ -1,10 +1,9 @@
 package com.danwink.space_cruiser.components;
 
-import game_framework.SyncReference;
-
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Component;
+import com.danwink.game_framework.network.SyncReference;
 import com.phyloa.dlib.math.Point2i;
 
 public class StarMapChunkComponent extends Component

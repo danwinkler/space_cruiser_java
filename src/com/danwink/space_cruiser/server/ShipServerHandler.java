@@ -7,15 +7,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import game_framework.InfiniteChunkLayerGenerator;
 import game_framework.InfiniteChunkManager;
 import game_framework.InfiniteChunkManager.Layer;
-import game_framework.ServerEntitySyncSystem;
-import game_framework.SyncComponent;
-import game_framework.SyncEngine;
-import game_framework.SyncReference;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.danwink.game_framework.network.NetworkServer;
+import com.danwink.game_framework.network.ServerEntitySyncSystem;
+import com.danwink.game_framework.network.SyncComponent;
+import com.danwink.game_framework.network.SyncEngine;
+import com.danwink.game_framework.network.SyncReference;
 import com.danwink.space_cruiser.FileHelper;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.StarNamer;
@@ -69,7 +69,7 @@ public class ShipServerHandler implements ServerGameHandler
 	
 	public void initializeGameState()
 	{
-		Entity ship = new Entity();
+		Entity ship = engine.newSyncEntity();
         MapComponent mc = new MapComponent();
         try
 		{
@@ -86,18 +86,13 @@ public class ShipServerHandler implements ServerGameHandler
 		ShipComponent sc;
 		ship.add( sc = new ShipComponent() );
 		ship.add( new PlayerShipComponent() );
-		ship.add( new SyncComponent( true ) );
-		
-		engine.addEntity( ship );
 		
 		for( int i = 0; i < 1; i++ )
 		{
-			Entity mover = new Entity();
-			mover.add( new SyncComponent( true ) );
+			Entity mover = engine.newSyncEntity();
 			MoveComponent move = new MoveComponent();
 			move.map = SyncReference.from( ship, mc );
 			mover.add( move );
-			engine.addEntity( mover );
 		}
 		
 		Entity starMapEntity = new Entity();
@@ -113,8 +108,7 @@ public class ShipServerHandler implements ServerGameHandler
 		starMap.icm.newLayer( "main", new InfiniteChunkLayerGenerator<StarMapChunkComponent>() {
 			public StarMapChunkComponent generate( int x, int y, String layerName )
 			{
-				Entity chunkEntity = new Entity();
-				chunkEntity.add( new SyncComponent( true ) );
+				Entity chunkEntity = engine.newSyncEntity();
 				StarMapChunkComponent chunk = new StarMapChunkComponent();
 				chunk.pos = new Point2i( x, y );
 				
@@ -127,10 +121,9 @@ public class ShipServerHandler implements ServerGameHandler
 					star.name = StarNamer.genStarName();
 					star.connectedStars = new CopyOnWriteArrayList<>();
 					
-					Entity starEntity = new Entity();
-					starEntity.add( new SyncComponent( true ) );
-					starEntity.add( star );
-					engine.addEntity( starEntity );
+					Entity starEntity = engine.newSyncEntity( e -> {
+						e.add( star );	
+					});
 					
 					if( sc.starSystemLocation == null ) sc.starSystemLocation = SyncReference.from( starEntity, star );
 					
@@ -206,7 +199,6 @@ public class ShipServerHandler implements ServerGameHandler
 				}
 				
 				chunkEntity.add( chunk );
-				engine.addEntity( chunkEntity );
 				
 				return chunk;
 			}

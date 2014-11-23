@@ -1,13 +1,12 @@
 package com.danwink.space_cruiser.screens;
 
-import game_framework.SyncEngine;
-
 import java.util.Optional;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.danwink.game_framework.network.NetworkClient;
+import com.danwink.game_framework.network.SyncEngine;
 import com.danwink.game_framework.screens.OverlayScreen;
 import com.danwink.space_cruiser.ClientMessages;
 import com.danwink.space_cruiser.systems.client.StarMapRenderSystem;

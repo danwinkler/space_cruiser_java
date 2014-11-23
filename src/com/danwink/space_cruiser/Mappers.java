@@ -1,8 +1,7 @@
 package com.danwink.space_cruiser;
 
-import game_framework.SyncComponent;
-
 import com.badlogic.ashley.core.ComponentMapper;
+import com.danwink.game_framework.network.SyncComponent;
 import com.danwink.space_cruiser.components.*;
 
 public class Mappers

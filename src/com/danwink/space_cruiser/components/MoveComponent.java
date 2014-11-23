@@ -1,11 +1,10 @@
 package com.danwink.space_cruiser.components;
 
-import game_framework.SyncReference;
-
 import java.util.LinkedList;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
+import com.danwink.game_framework.network.SyncReference;
 import com.phyloa.dlib.math.Point2i;
 
 public class MoveComponent extends Component

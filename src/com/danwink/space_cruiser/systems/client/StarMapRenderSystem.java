@@ -1,7 +1,6 @@
 package com.danwink.space_cruiser.systems.client;
 
 import game_framework.InfiniteChunkManager.Layer;
-import game_framework.SyncReference;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
+import com.danwink.game_framework.network.SyncReference;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.components.PlayerShipComponent;
 import com.danwink.space_cruiser.components.ShipComponent;

@@ -1,13 +1,13 @@
 package com.danwink.space_cruiser.systems;
 
 import game_framework.BetterIteratingSystem;
-import game_framework.SyncEngine;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.danwink.game_framework.network.NetworkServer;
+import com.danwink.game_framework.network.SyncEngine;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.components.MapComponent;
 import com.danwink.space_cruiser.components.MoveComponent;

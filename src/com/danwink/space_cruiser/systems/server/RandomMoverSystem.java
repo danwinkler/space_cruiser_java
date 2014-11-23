@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import game_framework.BetterIteratingSystem;
-import game_framework.ServerEntitySyncSystem;
-import game_framework.SyncComponent;
-import game_framework.SyncEngine;
 import game_framework.TileMapPathFinder;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.danwink.game_framework.network.ServerEntitySyncSystem;
+import com.danwink.game_framework.network.SyncComponent;
+import com.danwink.game_framework.network.SyncEngine;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.components.MapComponent;
 import com.danwink.space_cruiser.components.MoveComponent;
@@ -54,8 +54,10 @@ public class RandomMoverSystem extends BetterIteratingSystem
 			move.facing = Direction.fromCoords( b.x-a.x, b.y-a.y );
 			
 			move.path = p;
-			SyncComponent sc = ServerEntitySyncSystem.syncMapper.get( entity );
-			sc.sync = move;
+			
+			//TODO: somehow tell the SyncSystem to immediatly update just the MoveComponent for this entity
+			//SyncComponent sc = ServerEntitySyncSystem.syncMapper.get( entity );
+			//sc.sync = move;
 		}
 	}
 	
