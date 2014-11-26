@@ -16,6 +16,7 @@ import com.danwink.game_framework.network.ServerEntitySyncSystem;
 import com.danwink.game_framework.network.SyncComponent;
 import com.danwink.game_framework.network.SyncEngine;
 import com.danwink.game_framework.network.SyncReference;
+import com.danwink.space_cruiser.EntityFactory;
 import com.danwink.space_cruiser.FileHelper;
 import com.danwink.space_cruiser.Mappers;
 import com.danwink.space_cruiser.StarNamer;
@@ -95,119 +96,6 @@ public class ShipServerHandler implements ServerGameHandler
 			mover.add( move );
 		}
 		
-		Entity starMapEntity = new Entity();
-		StarMapComponent starMap = new StarMapComponent();
-		
-		starMap.icm = new InfiniteChunkManager<StarMapChunkComponent>( StarMapChunkComponent.class, StarMapComponent.chunkSize, StarMapComponent.chunkSize );
-		
-		//TODO: refactor out into it's own class
-		//TODO: SO MUCH ROOM FOR REFACTORING
-		//TODO: seems like all of the entity creation craziness in here could be abstracted
-		//		Possibly like a public Entity createSyncEntity( Component c ) in SyncEngine that 
-		//		Creates a new sync entity with the specified component and a SyncComponent
-		starMap.icm.newLayer( "main", new InfiniteChunkLayerGenerator<StarMapChunkComponent>() {
-			public StarMapChunkComponent generate( int x, int y, String layerName )
-			{
-				Entity chunkEntity = engine.newSyncEntity();
-				StarMapChunkComponent chunk = new StarMapChunkComponent();
-				chunk.pos = new Point2i( x, y );
-				
-				chunk.stars = new ArrayList<SyncReference<StarSystemComponent>>();
-				int starCount = DMath.randomi( 5, 9 );
-				for( int i = 0; i < starCount; i++ )
-				{
-					StarSystemComponent star = new StarSystemComponent();
-					star.pos = new Vector2( x*StarMapComponent.chunkSize + DMath.randomf( 0, StarMapComponent.chunkSize ), y*StarMapComponent.chunkSize + DMath.randomf( 0, StarMapComponent.chunkSize ) );
-					star.name = StarNamer.genStarName();
-					star.connectedStars = new CopyOnWriteArrayList<>();
-					
-					Entity starEntity = engine.newSyncEntity( e -> {
-						e.add( star );	
-					});
-					
-					if( sc.starSystemLocation == null ) sc.starSystemLocation = SyncReference.from( starEntity, star );
-					
-					Layer<StarMapChunkComponent> l = starMap.icm.getLayer( "main" );
-					for( int xx = x-1; xx <= x+1; xx++ )
-					{
-						for( int yy = y-1; yy <= y+1; yy++ )
-						{
-							if( xx == x && yy == y ) continue;
-							StarMapChunkComponent neighbor = l.getIfExists( xx, yy );
-							if( neighbor == null ) continue;
-							for( SyncReference<StarSystemComponent> otherStarMapSyncRef : neighbor.stars )
-							{
-								StarSystemComponent otherStar = otherStarMapSyncRef.get();
-								if( star.pos.dst2( otherStar.pos ) < StarMapComponent.connectDistance*StarMapComponent.connectDistance )
-								{
-									star.connectedStars.add( SyncReference.from( engine.getBySyncId( otherStarMapSyncRef.getId() ), otherStar ) );
-									otherStar.connectedStars.add( SyncReference.from( starEntity, star ) );
-								}
-							}
-						}
-					}
-					
-					chunk.stars.add( SyncReference.from( starEntity, star ) );
-				}
-				
-				for( SyncReference<StarSystemComponent> star1Ref : chunk.stars )
-				{
-					StarSystemComponent star1 = star1Ref.get();
-					for( SyncReference<StarSystemComponent> star2Ref : chunk.stars )
-					{
-						StarSystemComponent star2 = star2Ref.get();
-						if( star1.pos.dst2( star2.pos ) < StarMapComponent.connectDistance*StarMapComponent.connectDistance )
-						{
-							star1.connectedStars.add( star2Ref );
-							star2.connectedStars.add( star1Ref );
-						}
-					}
-				}
-				
-				//If a star has no connections, connect to the closest other star in another sector
-				for( SyncReference<StarSystemComponent> star1Ref : chunk.stars )
-				{
-					StarSystemComponent star1 = star1Ref.get();
-					if( star1.connectedStars.size() == 0 )
-					{
-						SyncReference<StarSystemComponent> closest = null;
-						float dist = 10000000000000f;
-						Layer<StarMapChunkComponent> l = starMap.icm.getLayer( "main" );
-						for( int xx = x-1; xx <= x+1; xx++ )
-						{
-							for( int yy = y-1; yy <= y+1; yy++ )
-							{
-								if( xx == x && yy == y ) continue;
-								StarMapChunkComponent neighbor = l.getIfExists( xx, yy );
-								if( neighbor == null ) continue;
-								for( SyncReference<StarSystemComponent> otherStarMapSyncRef : neighbor.stars )
-								{
-									StarSystemComponent otherStar = otherStarMapSyncRef.get();
-									float d = star1.pos.dst2( otherStar.pos );
-									if( d < dist )
-									{
-										closest = otherStarMapSyncRef;
-									}
-								}
-							}
-						}
-						if( closest != null ) 
-						{
-							star1.connectedStars.add( closest );
-						}
-					}
-				}
-				
-				chunkEntity.add( chunk );
-				
-				return chunk;
-			}
-		});
-		
-		starMapEntity.add( starMap );
-		
-		engine.addEntity( starMapEntity );
-		
-		starMap.icm.getLayer( "main" ).get( 0, 0 );
+		EntityFactory.newStarMap( engine );
 	}
 }

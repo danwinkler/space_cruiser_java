@@ -1,8 +1,6 @@
 package com.danwink.space_cruiser;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.danwink.space_cruiser.game_objects.Tiles.Floor;

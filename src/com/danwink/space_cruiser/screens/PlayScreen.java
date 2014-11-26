@@ -25,6 +25,7 @@ import com.danwink.space_cruiser.systems.client.ClientShipSystem;
 import com.danwink.space_cruiser.systems.client.ClientStarMapSystem;
 import com.danwink.space_cruiser.systems.client.MapRenderSystem;
 import com.danwink.space_cruiser.systems.client.MoveRenderSystem;
+import com.danwink.space_cruiser.systems.client.ShipEditSystem;
 
 public class PlayScreen extends BasicScreen
 {
@@ -33,6 +34,7 @@ public class PlayScreen extends BasicScreen
 	SyncEngine engine;
 	
 	MapRenderSystem mrs;
+	ShipEditSystem ses;
 	
 	Vector3 mousePos = new Vector3();
 	
@@ -97,12 +99,24 @@ public class PlayScreen extends BasicScreen
 	{
 		TextButton starMap = new TextButton( "Star Map", skin );
 		table.add( starMap );
+		
+		TextButton shipEdit = new TextButton( "Edit Ship", skin );
+		table.add( shipEdit );
+		
 		table.bottom().left();
 		
 		starMap.addListener( new ChangeListener() {
 			public void changed( ChangeEvent event, Actor actor )
 			{
 				overlayManager.activate( "starmap" );
+			}
+		});
+		
+		shipEdit.addListener( new ChangeListener() {
+			public void changed( ChangeEvent event, Actor actor )
+			{
+				engine.addSystem( ses = new ShipEditSystem() );
+				multiplexer.addProcessor( ses );
 			}
 		});
 	}
