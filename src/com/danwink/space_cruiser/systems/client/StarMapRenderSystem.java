@@ -50,6 +50,13 @@ public class StarMapRenderSystem extends IteratingSystem
 		font = new BitmapFont( true );
 	}
 	
+	@Override
+	public void removedFromEngine( Engine engine )
+	{
+		super.removedFromEngine( engine );
+		font.dispose();
+	}
+	
 	protected void processEntity( Entity entity, float deltaTime )
 	{
 		Entity shipEntity = engine.getEntitiesFor( Family.all( PlayerShipComponent.class ).get() ).first();

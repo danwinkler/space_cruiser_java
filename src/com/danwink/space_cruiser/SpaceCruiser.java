@@ -36,7 +36,11 @@ public class SpaceCruiser
 			
 			g.add( "connect", new ServerConnectScreen() {{
 				onSelect( address -> {
-					System.out.println( address );
+					try {
+						ScreenManager.getScreenManager( this ).activate( "play", createClient( address ) );
+					} catch( Exception e ) {
+						e.printStackTrace();
+					}
 				});
 				setBackScreen( "title" );
 			}});

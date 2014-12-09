@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.danwink.game_framework.network.ClientEntitySyncSystem;
@@ -34,7 +35,6 @@ public class PlayScreen extends BasicScreen
 	SyncEngine engine;
 	
 	MapRenderSystem mrs;
-	ShipEditSystem ses;
 	
 	Vector3 mousePos = new Vector3();
 	
@@ -66,6 +66,7 @@ public class PlayScreen extends BasicScreen
 		
 		overlayManager = new ScreenManager();
 		overlayManager.add( "starmap", new StarMapOverlay( engine, client ) );
+		overlayManager.add( "edit", new ShipEditOverlay( engine, client ) );
 		
 		buildUI();
 		
@@ -82,6 +83,7 @@ public class PlayScreen extends BasicScreen
 		mousePos.y = Gdx.input.getY();
 		camera.unproject( mousePos );
 		mrs.setMousePos( mousePos );
+		
 		engine.update( Gdx.graphics.getDeltaTime() );
 		
 		//We call the BasicScreen post render function here (we overrode it so it's not called automatically later)
@@ -97,13 +99,24 @@ public class PlayScreen extends BasicScreen
 	
 	public void buildUI()
 	{
+		Table subTable = new Table();
+		
 		TextButton starMap = new TextButton( "Star Map", skin );
-		table.add( starMap );
+		subTable.add( starMap );
 		
 		TextButton shipEdit = new TextButton( "Edit Ship", skin );
-		table.add( shipEdit );
+		subTable.add( shipEdit );
 		
+		subTable.setFillParent( true );
+		
+		subTable.bottom().left();
+		
+		
+		table.add( subTable );
 		table.bottom().left();
+		
+		table.setDebug( true );
+		
 		
 		starMap.addListener( new ChangeListener() {
 			public void changed( ChangeEvent event, Actor actor )
@@ -115,8 +128,7 @@ public class PlayScreen extends BasicScreen
 		shipEdit.addListener( new ChangeListener() {
 			public void changed( ChangeEvent event, Actor actor )
 			{
-				engine.addSystem( ses = new ShipEditSystem() );
-				multiplexer.addProcessor( ses );
+				overlayManager.activate( "edit" );
 			}
 		});
 	}

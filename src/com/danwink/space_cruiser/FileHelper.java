@@ -1,10 +1,11 @@
 package com.danwink.space_cruiser;
 
 import java.io.FileNotFoundException;
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.danwink.space_cruiser.game_objects.Tiles.Floor;
 import com.danwink.space_cruiser.game_objects.Tiles.NormalWall;
+import com.danwink.space_cruiser.game_objects.Tiles.SCTile;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.phyloa.dlib.util.DFile;
@@ -42,7 +43,7 @@ public class FileHelper
 	{
 		tileClassToInt = HashBiMap.create();
 		tileClassToInt.put( null, 0 );
-		tileClassToInt.put( Floor.class, 1 );
+		tileClassToInt.put( SCTile.class, 1 );
 		
 		intToTileClass = tileClassToInt.inverse();
 		
